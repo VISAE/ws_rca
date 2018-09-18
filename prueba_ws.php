@@ -30,4 +30,4 @@ $ws = new ws();
 
 // $servicio = $ws->getPeticion('estudiantes_periodo_especifico,474', 'curso,203033'); 
 // $servicio = $ws->getPeticion('zonas'); 
-$servicio = $ws->getPeticion('estudiantes_periodo_especifico,474', 'zona_especifica,2'); 
+$servicio = $ws->getPeticion('estudiantes_periodo_especifico,473', 'zona_especifica,2'); 

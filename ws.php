@@ -83,7 +83,15 @@ class ws
         foreach ($answer as $registro) {
             echo "<tr>";
             foreach ($registro as $key => $value) {
-                echo "<td>".htmlentities(base64_decode($value))."</td>";
+                echo "<td>";
+                if (is_array($value)) {
+                   foreach ($value as $keyVal => $valueVal) {
+                        // echo htmlentities(base64_decode($keyVal)).': '.htmlentities(base64_decode($valueVal));
+                        var_dump($valueVal);
+                    } 
+                } else
+                    echo htmlentities(base64_decode($value));
+                echo "</td>";
             }
             echo "<tr>";
         }
