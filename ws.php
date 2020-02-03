@@ -21,8 +21,10 @@ class ws
                                     'periodos_vigencia_especifica' => '/period/current/',
                                     'escuelas' => '/school',
                                     'escuela_especifica' => '/school/',
+                                    'escuela_especifica_' => '/School/',
                                     'programas' => '/program',
                                     'programa_especifico' => '/program/',
+                                    'programa_especifico_' => '/Program/',
                                     'programas_escuela_especifica' => '/program/school/',
                                     'programas_nivel_formacion' => '/program/level/',
                                     'programas_escuela_nivel_formacion' => '/program/level/',
@@ -32,25 +34,36 @@ class ws
                                     'zona_especifica' => '/Zone/',
                                     'centros' => '/center',
                                     'centro_especifico' => '/center/',
+                                    'centro_especifico_' => '/Center/',
                                     'centros_zona_especifica' => '/center/zone/',
                                     'estudiantes_periodo_especifico' => '/EnrolledStudents/Period/',
                                     'aspirantes_pendientes_periodo_especifico' => '/Invoice/Pending/Period/',
-                                    'curso' => '/Course/' );
+                                    'curso' => '/Course/',
+                                    'nota' => '/',
+                                    'periodo_individual' => '/EnrolledStudents/Individual/Period/',
+                                    'documento' => '/'
+                                );
     }
 
 
     function getServicio($servicio) {
-        echo $this->base_url . $servicio;
+        // echo $this->base_url . $servicio;
         curl_setopt($this->curl, CURLOPT_URL, $this->base_url . $servicio);
 
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
 
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Authorization: ' . $this->token->token));
 
+        curl_setopt($this->curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+
+        curl_setopt($this->curl, CURLOPT_ENCODING,  'gzip');
+
         $rta = json_decode($this->exec(), true);
+
         if ($rta['error'] == true) {
-            print_r(utf8_decode($rta['message'] . ' En el servicio ' . $servicio));
-            exit;
+            /*print_r(utf8_decode($rta['message'] . ' En el servicio ' . $servicio));
+            exit;*/
+            return array();
         }
         
         return $rta['info'];
@@ -73,29 +86,7 @@ class ws
             $servicio .= isset($valores[1])?$this->peticiones[$valores[0]].base64_encode((int)$valores[1]):$this->peticiones[$valores[0]];
         }
         
-        $answer = $this->getServicio($servicio);
-        echo "<table border='1'>";
-        echo "<tr>";
-        $keys = array_keys($answer[0]);
-        foreach ($keys as $key)
-            echo "<th>$key</th>";
-        echo "</tr>";
-        foreach ($answer as $registro) {
-            echo "<tr>";
-            foreach ($registro as $key => $value) {
-                echo "<td>";
-                if (is_array($value)) {
-                   foreach ($value as $keyVal => $valueVal) {
-                        // echo htmlentities(base64_decode($keyVal)).': '.htmlentities(base64_decode($valueVal));
-                        var_dump($valueVal);
-                    } 
-                } else
-                    echo htmlentities(base64_decode($value));
-                echo "</td>";
-            }
-            echo "<tr>";
-        }
-        echo "</table>";
+        return $this->getServicio($servicio);
     }
 
 }
